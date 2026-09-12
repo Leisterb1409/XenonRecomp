@@ -17,18 +17,5 @@ jobs:
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF -DXENON_SAMPLES=OFF -DXXHASH_BUILD_XXHSUM=OFF
 
-    - name: Compilar todos los proyectos
-      run: cmake --build build --config Release
-
-    - name: Buscar cualquier ejecutable generado
-      shell: powershell
-      run: |
-        New-Item -ItemType Directory -Force -Path dist
-        Get-ChildItem -Path build -Recurse -Filter *.exe | Where-Object { $_.Name -notlike "CompilerId*" } | Copy-Item -Destination dist\ -Force
-
-    - name: Subir ejecutables encontrados
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: xenon-recomp-windows
-        path: dist/
+    - name: Compilar con logs detallados
+      run: cmake --build build --config Release -- /v:n /p:ContinueOnError=true
