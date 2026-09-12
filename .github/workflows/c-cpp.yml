@@ -17,19 +17,17 @@ jobs:
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF -DXENON_SAMPLES=OFF -DXXHASH_BUILD_XXHSUM=OFF
 
-    - name: Compilar
-      run: cmake --build build --config Release -- /p:ContinueOnError=true /p:StopOnFirstFailure=false
+    - name: Compilar objetivo principal
+      run: cmake --build build --config Release --target xenon-recomp
 
-    - name: Buscar y copiar ejecutables a la raiz
+    - name: Buscar ejecutable
       shell: powershell
       run: |
         New-Item -ItemType Directory -Force -Path dist
-        Get-ChildItem -Path build -Recurse -Filter *.exe | Copy-Item -Destination dist\ -Force
-        Get-ChildItem -Path dist
+        Get-ChildItem -Path build -Recurse -Filter xenon-recomp.exe | Copy-Item -Destination dist\ -Force
 
-    - name: Subir ejecutables
+    - name: Subir ejecutable
       uses: actions/upload-artifact@v4
-      if: always()
       with:
         name: xenon-recomp-windows
         path: dist/
