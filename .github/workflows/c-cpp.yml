@@ -16,8 +16,8 @@ jobs:
     - name: Configurar CMake
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF -DXENON_SAMPLES=OFF
 
-    - name: Compilar ignorando errores en utilidades secundarias
-      run: cmake --build build --config Release -- /k /p:ContinueOnError=true
+    - name: Compilar ejecutable con MSBuild
+      run: cmake --build build --config Release -- /p:StopOnFirstFailure=false /v:m
 
     - name: Subir ejecutable xenon-recomp.exe
       uses: actions/upload-artifact@v4
