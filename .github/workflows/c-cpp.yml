@@ -8,13 +8,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Descargar codigo fuente
+    - name: Descargar codigo fuente con submodulos
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        submodules: 'recursive'
+        fetch-depth: 0
 
-    - name: Configurar CMake y MSVC
-      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+    - name: Configurar CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF
 
     - name: Compilar ejecutable
       run: cmake --build build --config Release
@@ -24,6 +25,4 @@ jobs:
       with:
         name: xenon-recomp-windows
         path: |
-          build/Release/xenon-recomp.exe
-          build/XenonRecomp/Release/xenon-recomp.exe
-          build/bin/Release/xenon-recomp.exe
+          build/**/xenon-recomp.exe
