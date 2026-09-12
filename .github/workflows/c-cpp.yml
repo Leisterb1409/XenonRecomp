@@ -12,13 +12,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: 'recursive'
-        fetch-depth: 0
 
     - name: Configurar CMake
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF
 
-    - name: Compilar ejecutable
-      run: cmake --build build --config Release
+    - name: Compilar solo el ejecutable principal
+      run: cmake --build build --config Release --target XenonRecomp
 
     - name: Subir ejecutable xenon-recomp.exe
       uses: actions/upload-artifact@v4
@@ -26,3 +25,5 @@ jobs:
         name: xenon-recomp-windows
         path: |
           build/**/xenon-recomp.exe
+          build/Release/xenon-recomp.exe
+          build/XenonRecomp/Release/xenon-recomp.exe
