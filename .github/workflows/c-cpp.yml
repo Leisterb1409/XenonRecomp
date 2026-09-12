@@ -1,0 +1,29 @@
+name: Compilar XenonRecomp Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Descargar codigo fuente
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configurar CMake y MSVC
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Compilar ejecutable
+      run: cmake --build build --config Release
+
+    - name: Subir ejecutable xenon-recomp.exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: xenon-recomp-windows
+        path: |
+          build/Release/xenon-recomp.exe
+          build/XenonRecomp/Release/xenon-recomp.exe
+          build/bin/Release/xenon-recomp.exe
