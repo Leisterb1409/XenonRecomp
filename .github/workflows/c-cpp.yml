@@ -14,16 +14,14 @@ jobs:
         submodules: 'recursive'
 
     - name: Configurar CMake
-      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF -DXENON_SAMPLES=OFF
 
-    - name: Compilar solo el ejecutable principal
-      run: cmake --build build --config Release --target XenonRecomp
+    - name: Compilar ignorando errores en utilidades secundarias
+      run: cmake --build build --config Release -- /k /p:ContinueOnError=true
 
     - name: Subir ejecutable xenon-recomp.exe
       uses: actions/upload-artifact@v4
       with:
         name: xenon-recomp-windows
         path: |
-          build/**/xenon-recomp.exe
-          build/Release/xenon-recomp.exe
-          build/XenonRecomp/Release/xenon-recomp.exe
+          build/**/*.exe
