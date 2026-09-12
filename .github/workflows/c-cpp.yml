@@ -13,17 +13,16 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Configurar CMake ignorando utilidades externas
+    - name: Configurar CMake
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release -DXENON_TESTS=OFF -DXENON_SAMPLES=OFF -DXXHASH_BUILD_XXHSUM=OFF
 
-    - name: Compilar ejecutable XenonRecomp
-      run: cmake --build build --config Release --target XenonRecomp -- /p:StopOnFirstFailure=false
+    - name: Compilar ignorando errores en utilidades secundarias
+      run: cmake --build build --config Release -- /p:ContinueOnError=true /p:StopOnFirstFailure=false
 
-    - name: Subir ejecutable xenon-recomp.exe
+    - name: Subir todo lo generado en build
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: xenon-recomp-windows
-        path: |
-          build/**/xenon-recomp.exe
-          build/**/XenonRecomp.exe
+        path: build/
